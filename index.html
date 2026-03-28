@@ -169,22 +169,6 @@
       box-shadow: 0 8px 40px rgba(37,99,235,0.25);
       transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s;
     }
-    .hero-photo-ring:hover {
-      transform: scale(1.04) translateY(-4px);
-      box-shadow: 0 20px 60px rgba(37,99,235,0.38);
-    }
-    .hero-photo-ring::before {
-      content: '';
-      position: absolute;
-      inset: -6px;
-      border-radius: 50%;
-      border: 2px solid rgba(37,99,235,0.2);
-      animation: ringPulse 3s infinite;
-    }
-    @keyframes ringPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.06); }
-    }
     .hero-photo-ring img {
       width: 100%;
       height: 100%;
@@ -271,28 +255,6 @@
     }
     .btn-outline:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--clr-accent); color: var(--clr-accent); }
 
-    .hero-scroll-hint {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--clr-muted);
-      font-family: var(--font-head);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      z-index: 1;
-      animation: bounce 2.5s infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(7px); }
-    }
-
     /* ===================== SECTIONS ===================== */
     section { padding: 6rem 5vw; display: flex; flex-direction: column; align-items: center; text-align: center; }
 
@@ -352,7 +314,6 @@
       margin-bottom: 1.2rem;
       line-height: 1.8;
     }
-    .sobre-text p strong { color: var(--clr-text); font-weight: 600; }
 
     .skills-section-title {
       font-family: var(--font-head);
@@ -386,7 +347,6 @@
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: default;
     }
-    .skill-tag:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .tag-blue   { background: var(--clr-accent-lt); color: var(--clr-accent); border-color: #BFDBFE; }
     .tag-amber  { background: var(--clr-pbi-lt); color: #B45309; border-color: #FDE68A; }
     .tag-orange { background: var(--clr-sql-lt); color: #C2410C; border-color: #FED7AA; }
@@ -398,7 +358,6 @@
       flex-direction: column;
       gap: 1.4rem;
       width: 100%;
-      margin-left: auto;
     }
 
     .stat-card {
@@ -422,6 +381,7 @@
     .si-blue  { background: var(--clr-accent-lt); }
     .si-amber { background: var(--clr-pbi-lt); }
     .si-teal  { background: #F0FDFA; }
+    .si-purple { background: #FDF4FF; }
 
     .stat-body h4 {
       font-family: var(--font-head);
@@ -670,7 +630,6 @@
     #contato .section-label { color: #38BDF8; }
     #contato h2 { color: #fff; }
     #contato .section-divider { margin: 1rem auto 1.5rem; background: linear-gradient(90deg, #2563EB, #38BDF8); }
-    #contato .section-desc { color: #94A3B8; max-width: 460px; margin: 0 auto 2.8rem; }
 
     .contact-links {
       display: flex;
@@ -722,12 +681,13 @@
     }
     .js-ready .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-    .js-ready .stagger > *:nth-child(1) { transition-delay: 0s; }
-    .js-ready .stagger > *:nth-child(2) { transition-delay: 0.08s; }
-    .js-ready .stagger > *:nth-child(3) { transition-delay: 0.16s; }
-    .js-ready .stagger > *:nth-child(4) { transition-delay: 0.24s; }
+    .js-ready .stagger > *:nth-child(n) { opacity: 0; transform: translateY(15px); transition: 0.5s ease forwards; }
+    .js-ready .stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+    .js-ready .stagger.visible > *:nth-child(2) { transition-delay: 0.08s; opacity: 1; transform: translateY(0); }
+    .js-ready .stagger.visible > *:nth-child(3) { transition-delay: 0.16s; opacity: 1; transform: translateY(0); }
+    .js-ready .stagger.visible > *:nth-child(4) { transition-delay: 0.24s; opacity: 1; transform: translateY(0); }
+    .js-ready .stagger.visible > *:nth-child(5) { transition-delay: 0.32s; opacity: 1; transform: translateY(0); }
 
-    /* ===================== RESPONSIVE ===================== */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .nav-burger { display: flex; }
@@ -750,7 +710,6 @@
       .sobre-grid { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
       .projetos-grid { grid-template-columns: 1fr; }
       h1 { font-size: 2.6rem; }
-      .hero-scroll-hint { display: none; }
       section { padding: 4rem 5vw; }
       .tl-item { gap: 1.2rem; }
       .timeline { text-align: left; }
@@ -767,15 +726,15 @@
       <li><a href="#experiencia">Experiência</a></li>
       <li><a href="#contato" class="nav-cta">Contato</a></li>
     </ul>
-    <button class="nav-burger" id="burger" aria-label="Abrir menu">
+    <button class="nav-burger" id="burger">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
   <section id="hero" style="text-align: left; align-items: flex-start;">
-    <div class="hero-grid-bg" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
 
     <div class="hero-inner">
       <div class="hero-text">
@@ -808,32 +767,26 @@
       </div>
       <div class="hero-photo-wrap fade-up">
         <div class="hero-photo-ring">
-          <img src="data:image/jpeg;base64,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..." alt="Pedro Ramos" />
+          <img src="data:image/jpeg;base64,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..." />
         </div>
       </div>
     </div>
-
-    <a href="#sobre" class="hero-scroll-hint">
-      Scroll Down
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
-    </a>
   </section>
 
   <section id="sobre">
     <div class="section-label fade-up">Sobre mim</div>
     <h2 class="fade-up">Minha Jornada</h2>
     <div class="section-divider fade-up"></div>
-    <p class="section-desc fade-up">
-      Sou Bacharel em Ciências Contábeis e estudante de Ciência de Dados, unindo visão de negócios com expertise analítica.
-    </p>
-
     <div class="sobre-grid">
       <div class="sobre-text fade-up">
         <p>
-          Atualmente atuo como <strong>Assistente Financeiro na Deloitte</strong>, onde aplico inteligência de dados para otimizar processos de contas a pagar e gestão financeira.
+          Sou Pedro Ramos, Analista de Dados & BI com foco em transformar dados brutos em inteligência de negócio. Minha abordagem une rigor técnico na modelagem de dados com sensibilidade visual para criar dashboards que comunicam com clareza e geram impacto real.
         </p>
         <p>
-          Meu foco é transformar grandes volumes de dados brutos em <strong>dashboards intuitivos e automatizados</strong> que geram valor imediato para a tomada de decisão corporativa.
+          Tenho experiência no ciclo completo de BI: desde a estruturação de bases e os processos de ETL com Power Query, passando pela modelagem Star Schema com tabelas Fato e Dimensão, até a criação de métricas em DAX e visualizações interativas no Power BI.
+        </p>
+        <p>
+          Paralelamente, desenvolvo habilidades sólidas em SQL — cobrindo consultas, agrupamentos, filtros condicionais e funções de agregação — e utilizo o Figma para prototipagem de interfaces analíticas centradas na experiência do usuário final.
         </p>
         
         <div class="skills-section-title">Stack Técnica</div>
@@ -866,17 +819,41 @@
             <p>Criação de soluções de autoatendimento para gestores.</p>
           </div>
         </div>
+        <div class="stat-card">
+          <div class="stat-icon si-amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          </div>
+          <div class="stat-body">
+            <h4>Business Intelligence</h4>
+            <p>Expertise em Power BI (DAX, Power Query) para suporte à decisão estratégica.</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-teal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="stat-body">
+            <h4>Análise com SQL</h4>
+            <p>Manipulação de grandes volumes de dados via Oracle SQL e MySQL.</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7E22CE" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+          </div>
+          <div class="stat-body">
+            <h4>Design de Produto</h4>
+            <p>Prototipagem de telas analíticas no Figma focadas em UX.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="projetos">
     <div class="section-label fade-up">Portfólio</div>
-    <h2 class="fade-up">Projetos em Destaque</h2>
+    <h2 class="fade-up">Projetos em Destaque.</h2>
     <div class="section-divider fade-up"></div>
-    <p class="section-desc fade-up">
-      Soluções reais desenvolvidas para resolver desafios complexos de dados.
-    </p>
 
     <div class="projetos-grid stagger">
       <article class="project-card">
@@ -886,11 +863,9 @@
             <div class="card-icon-box cib-pbi">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="#B45309"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
             </div>
-            <div class="card-meta-text">
-              <span class="card-type-label">Dashboard BI</span>
-            </div>
+            <div class="card-type-label">Dashboard BI</div>
           </div>
-          <h3>Gestão de Contas a Pagar</h3>
+          <h3>Dashboard de Gestão Financeira — Contas a Pagar</h3>
           <p>Projeto end-to-end simulando a operação financeira da Deloitte. Focado em visibilidade de prazos e fluxo de caixa.</p>
           <ul class="card-highlights">
             <li>Modelagem Star Schema com 4 dimensões.</li>
@@ -902,7 +877,7 @@
             <span class="sb sb-excel">Excel</span>
             <span class="sb sb-figma">Figma</span>
           </div>
-          <a href="#" class="card-link">Ver Case Study &rarr;</a>
+          <a href="https://github.com/ppedropeu/Contas_a_Pagar" target="_blank" class="card-link">Ver Repositório &rarr;</a>
         </div>
       </article>
 
@@ -913,11 +888,9 @@
             <div class="card-icon-box cib-sql">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="#C2410C"><path d="M12 2C7.58 2 4 3.79 4 6s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zm0 18c-4.42 0-8-1.79-8-4v-2.16c1.82 1.32 4.74 2.16 8 2.16s6.18-.84 8-2.16V16c0 2.21-3.58 4-8 4z"/></svg>
             </div>
-            <div class="card-meta-text">
-              <span class="card-type-label">Database Management</span>
-            </div>
+            <div class="card-type-label">Database Management</div>
           </div>
-          <h3>Análise de Vendas SQL</h3>
+          <h3>Repositório de Estudos SQL</h3>
           <p>Exploração de dados de um e-commerce para identificar padrões de comportamento de compra e churn de clientes.</p>
           <ul class="card-highlights">
             <li>Queries complexas com Joins e CTEs.</li>
@@ -929,7 +902,7 @@
             <span class="sb sb-sqlite">SQLite</span>
             <span class="sb sb-git">Git</span>
           </div>
-          <a href="#" class="card-link">Ver Repositório &rarr;</a>
+          <a href="https://github.com/ppedropeu/Rep-SQL" target="_blank" class="card-link">Ver Repositório &rarr;</a>
         </div>
       </article>
     </div>
@@ -940,7 +913,7 @@
     <h2 class="fade-up">Carreira e Educação</h2>
     <div class="section-divider fade-up"></div>
 
-    <div class="timeline fade-up">
+    <div class="timeline fade-up" style="margin: 0 auto;">
       <div class="tl-item">
         <div class="tl-dot">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
@@ -948,7 +921,7 @@
         <div class="tl-card">
           <div class="tl-top">
             <span class="tl-role">Assistente Financeiro</span>
-            <span class="tl-period">2025 — Presente</span>
+            <span class="tl-period">Jan 2025 — Presente</span>
           </div>
           <div class="tl-company">Deloitte (Recife/WFH)</div>
           <p>Atuação no departamento de Accounts Payable, utilizando análise de dados para controle de pagamentos e suporte estratégico à gestão.</p>
@@ -962,7 +935,7 @@
         <div class="tl-card">
           <div class="tl-top">
             <span class="tl-role">Ciência de Dados (Bacharelado)</span>
-            <span class="tl-period">Em andamento</span>
+            <span class="tl-period">Out 2024 — Jul 2028</span>
           </div>
           <div class="tl-company">Cruzeiro do Sul Virtual</div>
           <p>Desenvolvimento de competências em estatística, algoritmos de Machine Learning e linguagens de programação para dados.</p>
@@ -976,7 +949,7 @@
         <div class="tl-card">
           <div class="tl-top">
             <span class="tl-role">Bacharel em Ciências Contábeis</span>
-            <span class="tl-period">Concluído em 2024</span>
+            <span class="tl-period">Ago 2020 — Jun 2024</span>
           </div>
           <div class="tl-company">UNIBRA (Recife)</div>
           <p>Base sólida em auditoria, controladoria e análise de balanços, fundamentais para BI Financeiro.</p>
@@ -990,26 +963,19 @@
     <div class="section-label fade-up">Contato</div>
     <h2 class="fade-up">Vamos conversar?</h2>
     <div class="section-divider"></div>
-    <p class="section-desc fade-up">
-      Estou aberto a novas conexões e desafios na área de dados. Entre em contato por qualquer um dos canais abaixo.
-    </p>
 
     <div class="contact-links stagger">
       <a href="https://www.linkedin.com/in/pedroramosdeoliveira" target="_blank" rel="noopener" class="contact-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
         LinkedIn
       </a>
-      <a href="https://wa.me/5583986161136" target="_blank" rel="noopener" class="contact-link">
+      <a href="https://wa.me/5581985390022" target="_blank" rel="noopener" class="contact-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03c0 2.12.554 4.189 1.602 6.04L0 24l6.117-1.605a11.847 11.847 0 005.932 1.577h.005c6.631 0 12.026-5.398 12.03-12.03a11.85 11.85 0 00-3.417-8.423z"/></svg>
         WhatsApp
       </a>
       <a href="mailto:ppedropeu@gmail.com" class="contact-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         E-mail
-      </a>
-      <a href="https://github.com/ppedropeu" target="_blank" rel="noopener" class="contact-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub
       </a>
     </div>
   </section>
@@ -1019,43 +985,24 @@
   </footer>
 
   <script>
-    // Navbar Scroll Effect
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 30) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
+      if (window.scrollY > 30) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
     });
 
-    // Mobile Menu Toggle
     const burger = document.getElementById('burger');
     const navLinks = document.getElementById('navLinks');
-    burger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-    // Close menu when clicking a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-      });
-    });
+    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
 
-    // Intersection Observer for Animations
     document.body.classList.add('js-ready');
-    const observerOptions = { threshold: 0.15 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.fade-up, .stagger').forEach(el => {
-      observer.observe(el);
-    });
+    document.querySelectorAll('.fade-up, .stagger').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
