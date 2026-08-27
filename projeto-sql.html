@@ -26,8 +26,8 @@
     body{font-family:var(--f-body);background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;}
     body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");}
 
-    nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad-x);transition:background 0.4s,border-bottom 0.4s;}
-    nav.scrolled{background:rgba(247,245,242,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+    
+    
     .nav-logo{font-family:var(--f-display);font-size:1.1rem;font-weight:700;color:var(--ink);text-decoration:none;}
     .nav-logo em{color:var(--accent);font-style:italic;}
     .nav-back{font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;transition:color 0.2s,gap 0.2s;}
@@ -140,6 +140,76 @@
       .cta-block{padding:2rem;}
       .module-table td:last-child{display:none;}
     }
+  
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad-x);
+      background: rgba(220, 232, 248, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(168, 189, 212, 0.35);
+      transition: background 0.35s ease, box-shadow 0.35s ease, border-bottom-color 0.35s ease;
+    }
+    nav.scrolled {
+      background: rgba(213, 228, 247, 0.92);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 2px 20px rgba(28, 53, 87, 0.12);
+      border-bottom: 1.5px solid rgba(168, 189, 212, 0.70);
+    }
+
+    /* hide scrollbar */
+    html { scrollbar-width: none; }
+    html::-webkit-scrollbar { display: none; }
+
+    /* ── clickable code block ── */
+    .code-link { display: block; text-decoration: none; position: relative; }
+    .code-link .code-window { transition: box-shadow 0.3s, transform 0.3s; }
+    .code-link:hover .code-window {
+      box-shadow: 0 16px 48px rgba(15,107,85,0.22);
+      transform: translateY(-3px);
+    }
+    .code-overlay {
+      position: absolute; inset: 0;
+      background: rgba(8,28,20,0);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      transition: background 0.25s;
+      pointer-events: none;
+    }
+    .code-link:hover .code-overlay { background: rgba(8,28,20,0.52); }
+    .code-cta {
+      font-family: var(--f-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--teal);
+      padding: 0.55rem 1.2rem;
+      border-radius: 2px;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 4px 20px rgba(15,107,85,0.35);
+    }
+    .code-link:hover .code-cta { opacity: 1; transform: translateY(0); }
+    .code-corner {
+      position: absolute; bottom: 0.75rem; right: 0.9rem;
+      font-family: var(--f-mono); font-size: 0.58rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      background: rgba(0,0,0,0.3);
+      padding: 0.18rem 0.5rem; border-radius: 2px;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -190,8 +260,16 @@
 
 <!-- CODE PREVIEW -->
 <div style="padding:0 var(--pad-x) 4rem;max-width:1100px;margin:0 auto;" class="reveal">
-  <p style="font-family:var(--f-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:0.8rem;">Exemplo de consulta · Módulo 04 — GROUP BY</p>
-  <div class="code-window">
+  <p style="font-family:var(--f-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:0.8rem;">Exemplo de consulta · Módulo 04 — GROUP BY &nbsp;·&nbsp; clique para abrir o repositório</p>
+  <a href="https://github.com/ppedropeu/exercicios_sql" target="_blank" rel="noopener" class="code-link" title="Ver repositório no GitHub" style="display:block;text-decoration:none;">
+    <div class="code-overlay">
+      <span class="code-cta">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        Ver no GitHub
+      </span>
+    </div>
+    <span class="code-corner">GitHub</span>
+    <div class="code-window">
     <div class="code-titlebar">
       <div class="code-dot" style="background:#FF5F57;opacity:0.7;"></div>
       <div class="code-dot" style="background:#FEBC2E;opacity:0.7;"></div>
@@ -209,6 +287,7 @@
       <span><span class="ln">8</span><span class="kw">LIMIT</span><span class="tx">    10;</span></span>
     </div>
   </div>
+  </a><!-- /.code-link -->
 </div>
 
 <!-- POR QUE SQL IMPORTA -->
