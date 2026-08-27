@@ -61,19 +61,8 @@
     }
 
     /* ── NAV ─────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--pad-x);
-      transition: background 0.4s, border-bottom 0.4s;
-    }
-    nav.scrolled {
-      background: rgba(247,245,242,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
+    
+    
     .nav-logo {
       font-family: var(--f-display);
       font-size: 1.15rem;
@@ -938,7 +927,36 @@
     .proj-card:hover { background:#FDFCFA; transform:translateY(-3px); box-shadow:0 12px 40px rgba(26,35,50,0.10); transition:transform 0.3s, box-shadow 0.3s, background 0.2s; }
     .proj-card .proj-hover-hint { display:flex; align-items:center; gap:0.4rem; font-family:var(--f-mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); opacity:0; transform:translateY(4px); transition:opacity 0.2s, transform 0.2s; }
     .proj-card:hover .proj-hover-hint { opacity:1; transform:translateY(0); }
-</style>
+
+    /* hide scrollbar */
+    html { scrollbar-width: none; }
+    html::-webkit-scrollbar { display: none; }
+
+  
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad-x);
+      background: rgba(220, 232, 248, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(168, 189, 212, 0.35);
+      transition: background 0.35s ease, box-shadow 0.35s ease, border-bottom-color 0.35s ease;
+    }
+    nav.scrolled {
+      background: rgba(213, 228, 247, 0.92);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 2px 20px rgba(28, 53, 87, 0.12);
+      border-bottom: 1.5px solid rgba(168, 189, 212, 0.7);
+    }
+  </style>
 </head>
 <body>
 
@@ -1033,13 +1051,13 @@
     <div class="sobre-layout">
       <div class="sobre-text">
         <p class="reveal d1">
-          Sou <strong>Pedro Ramos</strong>, Analista de Dados &amp; BI com foco em transformar dados brutos em inteligência de negócio. Minha abordagem une rigor técnico na modelagem de dados com sensibilidade visual para criar dashboards que comunicam com clareza e geram impacto real.
+          Sou <strong>Pedro Victor Ramos</strong>, Analista de Dados &amp; BI Jr com sólida experiência financeira e foco crescente em inteligência de dados. Passei por empresas como <strong>Deloitte</strong>, <strong>FCB Brasil</strong> e <strong>Hapvida</strong> — o que me deu visão real dos problemas que os dados precisam resolver no dia a dia das organizações.
         </p>
         <p class="reveal d2">
-          Tenho experiência no ciclo completo de BI: desde a estruturação de bases e os processos de <strong>ETL com Power Query</strong>, passando pela <strong>modelagem Star Schema</strong> com tabelas Fato e Dimensão, até a criação de métricas em <strong>DAX</strong> e visualizações interativas no <strong>Power BI</strong>.
+          Atualmente atuo na <strong>São Braz S.A.</strong> como Analista de Vendas Jr, desenvolvendo soluções que auxiliam decisões em todos os níveis hierárquicos — da equipe de campo à alta gerência. Tenho experiência no ciclo completo de BI: desde a estruturação de bases e os processos de <strong>ETL com Power Query</strong>, passando pela <strong>modelagem Star Schema</strong>, até métricas em <strong>DAX</strong> e visualizações interativas no <strong>Power BI</strong>.
         </p>
         <p class="reveal d3">
-          Paralelamente, desenvolvo habilidades sólidas em <strong>SQL</strong> — cobrindo consultas, agrupamentos, filtros condicionais e funções de agregação — e utilizo o <strong>Figma</strong> para prototipagem de interfaces analíticas centradas na experiência do usuário final.
+          Paralelamente, desenvolvo habilidades sólidas em <strong>SQL</strong> — consultas, agrupamentos, filtros condicionais e funções de agregação — e aprimoro o <strong>inglês</strong> para ampliar minha atuação em ambientes corporativos multinacionais.
         </p>
 
         <p class="stack-heading reveal d4">Stack Técnica</p>
@@ -1337,56 +1355,134 @@
       </div>
       <div class="exp-list">
 
+        <!-- São Braz -->
         <div class="exp-item reveal d1">
           <div class="exp-period">
             <strong>Atual</strong>
-            set 2025 –<br/>set 2027
+            mai 2026 –<br/>o momento
           </div>
           <div class="exp-body">
-            <p class="exp-role">CST — Ciência de Dados</p>
-            <p class="exp-company">CRUZEIRO DO SUL VIRTUAL · Em andamento · EAD</p>
-            <p>Tecnólogo com foco em fundamentos de ciência de dados, estatística, programação e análise de grandes volumes de informação.</p>
+            <p class="exp-role">Analista de Vendas Jr</p>
+            <p class="exp-company">SÃO BRAZ S.A. INDÚSTRIA E COMÉRCIO DE ALIMENTOS · Presencial · Cabedelo, PB</p>
+            <p>Atuação nas análises e no monitoramento de dados de vendas e merchandising de uma das maiores indústrias de alimentos da Paraíba. Desenvolvimento de dashboards em Power BI, modelagem de KPIs com DAX e gestão diária de relatórios para alta gerência e supervisores, facilitando decisões orientadas a dados em todos os níveis hierárquicos.</p>
             <div class="exp-stack">
-              <span class="etag">Em andamento</span>
+              <span class="etag">Power BI</span>
+              <span class="etag">DAX</span>
+              <span class="etag">Power Query</span>
+              <span class="etag">Excel Avançado</span>
+              <span class="etag">Business Intelligence</span>
             </div>
           </div>
         </div>
 
+        <!-- Deloitte — Fiscal -->
         <div class="exp-item reveal d2">
           <div class="exp-period">
-            <strong>Atual</strong>
-            nov 2025 –<br/>o momento
+            <strong>2025–2026</strong>
+            out 2025 –<br/>abr 2026
           </div>
           <div class="exp-body">
-            <p class="exp-role">Data Analytics — Formação em Análise de Dados</p>
-            <p class="exp-company">XPERIUN · Em andamento · EAD</p>
-            <p>Especialização prática voltada para o mercado de dados, com módulos progressivos de ferramentas e metodologias analíticas.</p>
+            <p class="exp-role">Assistente Financeiro | Fiscal</p>
+            <p class="exp-company">DELOITTE · Híbrido · Recife, PE</p>
+            <p>100% de precisão na apuração e recolhimento de impostos federais (IR, INSS, PIS, COFINS e CSLL), mitigando riscos de autuações e multas fiscais. Otimização do fluxo de input em sistemas ERP via tratamento e saneamento de bases de dados. Auxílio na entrega das obrigações acessórias dentro dos prazos legais.</p>
             <div class="exp-stack">
-              <span class="etag">SQL</span>
-              <span class="etag">Power BI</span>
-              <span class="etag">Python</span>
-              <span class="etag">Estatística Descritiva</span>
-              <span class="etag">Storytelling com Dados</span>
+              <span class="etag">Tax One</span>
+              <span class="etag">Power Query</span>
+              <span class="etag">Excel Avançado</span>
             </div>
           </div>
         </div>
 
+        <!-- Deloitte — Contas a Pagar -->
         <div class="exp-item reveal d3">
           <div class="exp-period">
-            <strong>2021–2024</strong>
-            jan 2021 –<br/>dez 2024
+            <strong>2025</strong>
+            jan 2025 –<br/>out 2025
           </div>
           <div class="exp-body">
-            <p class="exp-role">Bacharelado em Ciências Contábeis</p>
-            <p class="exp-company">UNIBRA — CENTRO UNIVERSITÁRIO BRASILEIRO · Concluído · Recife, PE</p>
-            <p>Graduação com sólida base em finanças, auditoria, legislação tributária e gestão contábil, fundamentando a atuação analítica em ambientes corporativos.</p>
+            <p class="exp-role">Assistente Financeiro | Contas a Pagar</p>
+            <p class="exp-company">DELOITTE · Híbrido · Recife, PE</p>
+            <p>100% de cumprimento dos prazos de pagamentos, eliminando multas, juros e desgaste com fornecedores. Gestão completa do ciclo de AP para clientes nacionais e multinacionais. Conciliações bancárias detalhadas e garantia da confiabilidade dos dados para auditorias.</p>
             <div class="exp-stack">
-              <span class="etag">Concluído</span>
+              <span class="etag">Oracle E-Business Suite (AP/GL)</span>
+              <span class="etag">SAP Business One</span>
+              <span class="etag">Excel Avançado</span>
+              <span class="etag">Sistemas Bancários Online</span>
             </div>
+          </div>
+        </div>
+
+        <!-- FCB Brasil -->
+        <div class="exp-item reveal d4">
+          <div class="exp-period">
+            <strong>2023–2024</strong>
+            jul 2023 –<br/>dez 2024
+          </div>
+          <div class="exp-body">
+            <p class="exp-role">Estagiário Financeiro — FP&amp;A</p>
+            <p class="exp-company">FCB BRASIL · Remoto · São Paulo, SP</p>
+            <p>Elaboração de relatórios Budget vs. Actual com insights para tomada de decisão gerencial. Extração, limpeza e validação de dados financeiros no SAP. Desenvolvimento de planilhas gerenciais que reduziram significativamente o tempo de geração de relatórios internos.</p>
+            <div class="exp-stack">
+              <span class="etag">SAP</span>
+              <span class="etag">Excel Avançado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hapvida -->
+        <div class="exp-item reveal d5">
+          <div class="exp-period">
+            <strong>2021–2023</strong>
+            ago 2021 –<br/>mai 2023
+          </div>
+          <div class="exp-body">
+            <p class="exp-role">Assistente Jurídico de Contencioso Administrativo</p>
+            <p class="exp-company">HAPVIDA · Presencial · Recife, PE</p>
+            <p>Cumprimento rigoroso de prazos administrativos junto a órgãos públicos, realização de diligências e apoio na construção de estratégias de defesa. Cooperação com gestores para alinhamento jurídico e conformidade regulatória.</p>
+          </div>
+        </div>
+
+        <!-- FAV — Administrativo PL -->
+        <div class="exp-item reveal d6">
+          <div class="exp-period">
+            <strong>2021</strong>
+            jan 2021 –<br/>jul 2021
+          </div>
+          <div class="exp-body">
+            <p class="exp-role">Assistente Administrativo PL</p>
+            <p class="exp-company">FUNDAÇÃO ALTINO VENTURA · Presencial · Recife, PE</p>
+            <p>Suporte integrado às áreas administrativa, financeira e logística, com organização e controle de fluxo de documentos. Atendimento a fornecedores e clientes com registro e controle de informações sobre produtos e serviços.</p>
+          </div>
+        </div>
+
+        <!-- FAV — Contas a Receber -->
+        <div class="exp-item reveal d6">
+          <div class="exp-period">
+            <strong>2018–2020</strong>
+            dez 2018 –<br/>abr 2020
+          </div>
+          <div class="exp-body">
+            <p class="exp-role">Assistente de Contas a Receber PL</p>
+            <p class="exp-company">FUNDAÇÃO ALTINO VENTURA · Presencial · Recife, PE</p>
+            <p>Execução do ciclo de caixa: recebimento de pagamentos de serviços médicos e emissão de notas fiscais. Elaboração e organização de relatórios financeiros para suporte a auditorias e contabilizações.</p>
+          </div>
+        </div>
+
+        <!-- FAV — Cargos Anteriores -->
+        <div class="exp-item reveal d6">
+          <div class="exp-period">
+            <strong>2016–2018</strong>
+            mai 2016 –<br/>dez 2018
+          </div>
+          <div class="exp-body">
+            <p class="exp-role">Cargos Anteriores — Fundação Altino Ventura</p>
+            <p class="exp-company">FUNDAÇÃO ALTINO VENTURA · Presencial · Recife, PE</p>
+            <p>Trajetória de crescimento progressivo: Assistente Administrativo Aprendiz (mai 2016–ago 2017), Assistente Administrativo Jr. (dez 2017–ago 2018) e Assistente de Patrimônio PL (set–dez 2018). Controle patrimonial, inventários periódicos e suporte em rotinas administrativas e de departamento pessoal.</p>
           </div>
         </div>
 
       </div>
+    </div>
     </div>
 
   </div>
