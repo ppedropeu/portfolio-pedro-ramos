@@ -1,531 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Estudos SQL · Pedro Ramos</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg:#F7F5F2; --bg-warm:#EFECE7; --bg-card:#FFFFFF;
-      --ink:#111111; --ink-2:#444444; --ink-3:#888888;
-      --border:#E0DCD6;
-      --accent:#1B3A6B; --accent-lt:#EEF2FA; --accent-mid:#C7D3EB;
-      --gold:#C9A84C; --gold-lt:#FBF5E6;
-      --teal:#1A6B5A; --teal-lt:#EBF5F2;
-      --teal-dark:#0D3B2E;
-      --f-display:'Playfair Display',Georgia,serif;
-      --f-body:'DM Sans',system-ui,sans-serif;
-      --f-mono:'DM Mono','Courier New',monospace;
-      --nav-h:68px; --pad-x:clamp(1.5rem,5vw,5rem);
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;font-size:16px;}
-    body{font-family:var(--f-body);background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;}
-    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");}
-
-    
-    
-    .nav-logo{font-family:var(--f-display);font-size:1.1rem;font-weight:700;color:var(--ink);text-decoration:none;}
-    .nav-logo em{color:var(--accent);font-style:italic;}
-    .nav-back{font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;transition:color 0.2s,gap 0.2s;}
-    .nav-back:hover{color:var(--accent);gap:0.8rem;}
-
-    .top-bar{height:3px;background:linear-gradient(90deg,var(--teal) 0%,var(--gold) 50%,var(--teal-dark) 100%);}
-
-    /* HERO */
-    .proj-hero{padding:calc(var(--nav-h) + 5rem) var(--pad-x) 5rem;background:var(--bg);position:relative;overflow:hidden;}
-    .proj-hero::before{content:'';position:absolute;right:-200px;top:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(26,107,90,0.06) 0%,transparent 70%);pointer-events:none;}
-    .proj-hero-inner{max-width:900px;}
-    .proj-eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
-    .proj-eyebrow-line{width:40px;height:1px;background:var(--ink-3);}
-    .proj-eyebrow-tag{font-family:var(--f-mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);}
-    .proj-eyebrow-accent{font-family:var(--f-mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);font-weight:500;}
-    h1.proj-title{font-family:var(--f-display);font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;line-height:1;letter-spacing:-0.03em;color:var(--ink);margin-bottom:1.5rem;}
-    h1.proj-title em{font-style:italic;color:var(--teal);}
-    .proj-intro{font-size:1.1rem;color:var(--ink-2);line-height:1.8;max-width:680px;margin-bottom:2.5rem;}
-    .proj-meta-row{display:flex;flex-wrap:wrap;gap:1.5rem;padding:1.5rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:3rem;}
-    .proj-meta-label{font-family:var(--f-mono);font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:0.3rem;}
-    .proj-meta-value{font-family:var(--f-body);font-size:0.9rem;font-weight:600;color:var(--ink);}
-
-    /* CODE WINDOW */
-    .code-window{background:#0D2E25;border-radius:8px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.15);border:1px solid rgba(107,206,189,0.15);}
-    .code-titlebar{background:#0A2218;padding:0.7rem 1rem;display:flex;align-items:center;gap:0.6rem;}
-    .code-dot{width:10px;height:10px;border-radius:50%;}
-    .code-filename{font-family:var(--f-mono);font-size:0.68rem;color:rgba(255,255,255,0.35);margin-left:auto;}
-    .code-body{padding:1.5rem 1.8rem;font-family:var(--f-mono);font-size:0.82rem;line-height:1.8;overflow-x:auto;}
-    .code-body .ln{color:rgba(255,255,255,0.2);user-select:none;margin-right:1.2rem;font-size:0.72rem;}
-    .kw{color:#6BCEBD;font-weight:500;}
-    .fn{color:#C9A84C;}
-    .str{color:#98D9A8;}
-    .cm{color:rgba(255,255,255,0.3);font-style:italic;}
-    .tx{color:rgba(255,255,255,0.75);}
-    .hl{background:rgba(107,206,189,0.07);display:block;margin:0 -1.8rem;padding:0 1.8rem;}
-
-    /* CONTENT */
-    .content-section{padding:5rem var(--pad-x);}
-    .content-section.alt{background:var(--bg-warm);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-    .content-inner{max-width:900px;margin:0 auto;}
-    .section-marker{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
-    .section-num{font-family:var(--f-mono);font-size:0.68rem;letter-spacing:0.14em;color:var(--ink-3);}
-    .section-rule{width:40px;height:1px;background:var(--border);}
-    .section-tag{font-family:var(--f-mono);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);}
-    h2.section-h{font-family:var(--f-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;color:var(--ink);margin-bottom:1rem;}
-    h2.section-h em{font-style:italic;color:var(--teal);}
-    .prose{font-size:1rem;color:var(--ink-2);line-height:1.85;max-width:720px;}
-    .prose + .prose{margin-top:1rem;}
-    .prose strong{color:var(--ink);font-weight:600;}
-
-    /* MODULE TABLE */
-    .module-table{width:100%;border-collapse:collapse;margin-top:2rem;}
-    .module-table th{font-family:var(--f-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0.6rem 1rem;text-align:left;border-bottom:2px solid var(--border);}
-    .module-table td{padding:1rem;border-bottom:1px solid var(--border);vertical-align:top;}
-    .module-table tr:hover td{background:var(--accent-lt);}
-    .mod-num{font-family:var(--f-mono);font-size:0.72rem;color:var(--teal);font-weight:500;}
-    .mod-name{font-size:0.92rem;font-weight:600;color:var(--ink);}
-    .mod-desc{font-size:0.84rem;color:var(--ink-2);line-height:1.6;margin-top:0.2rem;}
-    .mod-tags{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.5rem;}
-    .mod-tag{font-family:var(--f-mono);font-size:0.62rem;padding:0.15rem 0.5rem;border-radius:2px;background:var(--teal-lt);color:var(--teal);border:1px solid #b0d5cc;}
-    .mod-count{font-family:var(--f-mono);font-size:0.75rem;color:var(--ink-3);text-align:center;}
-
-    /* SKILL CARDS */
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;}
-    .info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.6rem;}
-    .info-card-icon{width:40px;height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
-    .icon-teal{background:var(--teal-lt);}
-    .icon-blue{background:var(--accent-lt);}
-    .icon-gold{background:var(--gold-lt);}
-    .info-card h4{font-family:var(--f-display);font-size:1rem;font-weight:700;margin-bottom:0.5rem;color:var(--ink);}
-    .info-card p{font-size:0.88rem;color:var(--ink-2);line-height:1.7;}
-
-    /* IMPORTANCE LIST */
-    .results-list{list-style:none;display:flex;flex-direction:column;gap:0;margin-top:2rem;}
-    .results-list li{display:grid;grid-template-columns:auto 1fr;gap:1.2rem;padding:1.4rem 0;border-bottom:1px solid var(--border);align-items:start;transition:padding-left 0.2s;}
-    .results-list li:first-child{border-top:1px solid var(--border);}
-    .results-list li:hover{padding-left:0.5rem;}
-    .res-num{font-family:var(--f-mono);font-size:0.65rem;color:var(--teal);font-weight:500;margin-top:0.2rem;}
-    .res-body h5{font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.25rem;}
-    .res-body p{font-size:0.87rem;color:var(--ink-2);line-height:1.65;}
-
-    /* CTA */
-    .cta-block{background:var(--teal-dark);color:#fff;border-radius:8px;padding:3rem;margin-top:4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;}
-    .cta-text h3{font-family:var(--f-display);font-size:1.6rem;font-weight:900;font-style:italic;color:#fff;margin-bottom:0.5rem;}
-    .cta-text p{font-size:0.9rem;color:rgba(255,255,255,0.55);}
-    .cta-btns{display:flex;gap:0.8rem;flex-wrap:wrap;}
-    .btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--f-body);font-size:0.8rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:0.7rem 1.4rem;text-decoration:none;border:none;cursor:pointer;border-radius:2px;transition:transform 0.2s,box-shadow 0.2s,background 0.2s,color 0.2s;}
-    .btn-teal{background:var(--teal);color:#fff;}
-    .btn-teal:hover{background:#155a4a;transform:translateY(-2px);}
-    .btn-outline-light{background:transparent;color:rgba(255,255,255,0.8);border:1.5px solid rgba(255,255,255,0.25);}
-    .btn-outline-light:hover{border-color:rgba(255,255,255,0.6);color:#fff;transform:translateY(-1px);}
-
-    .tech-grid{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.5rem;}
-    .tech-tag{font-family:var(--f-mono);font-size:0.72rem;font-weight:500;padding:0.3rem 0.8rem;border-radius:2px;border:1px solid transparent;}
-    .tt-sql{background:var(--teal-lt);color:var(--teal);border-color:#b0d5cc;}
-    .tt-tool{background:var(--gold-lt);color:#8a6a1a;border-color:#e8d49a;}
-    .tt-other{background:#F5F5F5;color:#555;border-color:#DDD;}
-
-    .js-ready .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
-    .js-ready .reveal.in{opacity:1;transform:translateY(0);}
-    .d1{transition-delay:0.05s!important;} .d2{transition-delay:0.12s!important;} .d3{transition-delay:0.19s!important;}
-    .d4{transition-delay:0.26s!important;} .d5{transition-delay:0.33s!important;}
-
-    footer{background:#0A0A0A;padding:1.5rem var(--pad-x);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
-    footer p{font-family:var(--f-mono);font-size:0.68rem;letter-spacing:0.08em;color:#444;}
-    .f-logo{font-family:var(--f-display);font-size:0.9rem;font-weight:700;color:#333;font-style:italic;}
-
-    @media(max-width:700px){
-      .two-col{grid-template-columns:1fr;}
-      .cta-block{padding:2rem;}
-      .module-table td:last-child{display:none;}
-    }
-  
-    /* ── NAVBAR ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--pad-x);
-      background: rgba(220, 232, 248, 0.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(168, 189, 212, 0.35);
-      transition: background 0.35s ease, box-shadow 0.35s ease, border-bottom-color 0.35s ease;
-    }
-    nav.scrolled {
-      background: rgba(213, 228, 247, 0.92);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      box-shadow: 0 2px 20px rgba(28, 53, 87, 0.12);
-      border-bottom: 1.5px solid rgba(168, 189, 212, 0.70);
-    }
-
-    /* hide scrollbar */
-    html { scrollbar-width: none; }
-    html::-webkit-scrollbar { display: none; }
-
-    /* ── clickable code block ── */
-    .code-link { display: block; text-decoration: none; position: relative; }
-    .code-link .code-window { transition: box-shadow 0.3s, transform 0.3s; }
-    .code-link:hover .code-window {
-      box-shadow: 0 16px 48px rgba(15,107,85,0.22);
-      transform: translateY(-3px);
-    }
-    .code-overlay {
-      position: absolute; inset: 0;
-      background: rgba(8,28,20,0);
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 8px;
-      transition: background 0.25s;
-      pointer-events: none;
-    }
-    .code-link:hover .code-overlay { background: rgba(8,28,20,0.52); }
-    .code-cta {
-      font-family: var(--f-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fff;
-      background: var(--teal);
-      padding: 0.55rem 1.2rem;
-      border-radius: 2px;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.2s, transform 0.2s;
-      box-shadow: 0 4px 20px rgba(15,107,85,0.35);
-    }
-    .code-link:hover .code-cta { opacity: 1; transform: translateY(0); }
-    .code-corner {
-      position: absolute; bottom: 0.75rem; right: 0.9rem;
-      font-family: var(--f-mono); font-size: 0.58rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      background: rgba(0,0,0,0.3);
-      padding: 0.18rem 0.5rem; border-radius: 2px;
-      pointer-events: none;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudos de SQL · Pedro Ramos</title>
+<meta name="description" content="Repositório de estudos de SQL: mais de 24 exercícios sobre uma base real do Kaggle, de WHERE e filtros a GROUP BY com HAVING.">
+<meta name="theme-color" content="#F5F5F7">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Estudos de SQL · Pedro Ramos">
+<meta property="og:description" content="Repositório de estudos de SQL: mais de 24 exercícios sobre uma base real do Kaggle, de WHERE e filtros a GROUP BY com HAVING.">
+<meta property="og:image" content="https://ppedropeu.github.io/portfolio-pedro-ramos/img/pedro.jpg">
+<meta property="og:url" content="https://ppedropeu.github.io/portfolio-pedro-ramos/projeto-sql.html">
+<link rel="icon" href="img/pedro.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<div class="top-bar"></div>
-
-<nav id="navbar">
-  <a href="index.html" class="nav-logo">Pedro<em>.</em></a>
-  <a href="index.html" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Voltar ao portfólio
-  </a>
-</nav>
-
-<!-- HERO -->
-<div class="proj-hero">
-  <div class="proj-hero-inner">
-    <div class="proj-eyebrow reveal">
-      <span class="proj-eyebrow-line"></span>
-      <span class="proj-eyebrow-tag">Projeto · SQL</span>
-      <span class="proj-eyebrow-line"></span>
-      <span class="proj-eyebrow-accent">Análise de Dados</span>
-    </div>
-    <h1 class="proj-title reveal d1">Repositório de<br/><em>Estudos SQL.</em></h1>
-    <p class="proj-intro reveal d2">
-      Uma jornada documentada de aprendizado em SQL — organizada por progressão, com exercícios práticos sobre uma base de dados real do Kaggle. Não é apenas um repositório de código: é evidência de raciocínio analítico em construção contínua.
-    </p>
-    <div class="proj-meta-row reveal d3">
-      <div class="proj-meta-item">
-        <div class="proj-meta-label">Linguagem</div>
-        <div class="proj-meta-value">SQL · SQLite</div>
-      </div>
-      <div class="proj-meta-item">
-        <div class="proj-meta-label">Base de dados</div>
-        <div class="proj-meta-value">Kaggle · teomewhy-loyalty-system</div>
-      </div>
-      <div class="proj-meta-item">
-        <div class="proj-meta-label">Exercícios</div>
-        <div class="proj-meta-value">24+ documentados</div>
-      </div>
-      <div class="proj-meta-item">
-        <div class="proj-meta-label">Referência</div>
-        <div class="proj-meta-value">Curso Téo Calvo · Téo Me Why</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CODE PREVIEW -->
-<div style="padding:0 var(--pad-x) 4rem;max-width:1100px;margin:0 auto;" class="reveal">
-  <p style="font-family:var(--f-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:0.8rem;">Exemplo de consulta · Módulo 04 — GROUP BY &nbsp;·&nbsp; clique para abrir o repositório</p>
-  <a href="https://github.com/ppedropeu/exercicios_sql" target="_blank" rel="noopener" class="code-link" title="Ver repositório no GitHub" style="display:block;text-decoration:none;">
-    <div class="code-overlay">
-      <span class="code-cta">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        Ver no GitHub
-      </span>
-    </div>
-    <span class="code-corner">GitHub</span>
-    <div class="code-window">
-    <div class="code-titlebar">
-      <div class="code-dot" style="background:#FF5F57;opacity:0.7;"></div>
-      <div class="code-dot" style="background:#FEBC2E;opacity:0.7;"></div>
-      <div class="code-dot" style="background:#28C840;opacity:0.7;"></div>
-      <span class="code-filename">04_group_by / 02_group_by.sql</span>
-    </div>
-    <div class="code-body">
-      <span><span class="ln">1</span><span class="cm">-- Top 10 clientes que mais fizeram pontos no mês de Julho/2025</span></span><br/>
-      <span class="hl"><span><span class="ln">2</span><span class="kw">SELECT</span><span class="tx">   t.idCliente,</span></span><br/>
-      <span><span class="ln">3</span><span class="tx">         </span><span class="fn">SUM</span><span class="tx">(t.qtdPontos) </span><span class="kw">AS</span><span class="tx"> total_pontos</span></span><br/></span>
-      <span><span class="ln">4</span><span class="kw">FROM</span><span class="tx">     transactions t</span></span><br/>
-      <span class="hl"><span><span class="ln">5</span><span class="kw">WHERE</span><span class="tx">    </span><span class="fn">strftime</span><span class="tx">(</span><span class="str">'%Y-%m'</span><span class="tx">, t.dtTransaction) = </span><span class="str">'2025-07'</span></span><br/></span>
-      <span><span class="ln">6</span><span class="kw">GROUP BY</span><span class="tx"> t.idCliente</span></span><br/>
-      <span><span class="ln">7</span><span class="kw">ORDER BY</span><span class="tx"> total_pontos </span><span class="kw">DESC</span></span><br/>
-      <span><span class="ln">8</span><span class="kw">LIMIT</span><span class="tx">    10;</span></span>
-    </div>
-  </div>
-  </a><!-- /.code-link -->
-</div>
-
-<!-- POR QUE SQL IMPORTA -->
-<div class="content-section alt">
-  <div class="content-inner">
-    <div class="section-marker reveal">
-      <span class="section-num">01</span>
-      <span class="section-rule"></span>
-      <span class="section-tag">A Importância do SQL</span>
-    </div>
-    <h2 class="section-h reveal d1">Por que SQL é<br/><em>fundamental.</em></h2>
-    <p class="prose reveal d2">
-      SQL é a linguagem universal dos dados. Independente da ferramenta que você usa — Power BI, Python, Tableau ou qualquer plataforma de BI — <strong>a capacidade de interrogar bancos de dados diretamente</strong> é o que diferencia um analista que depende de extrações prontas de um profissional que consegue acessar, transformar e validar os dados na origem.
-    </p>
-    <p class="prose reveal d3">
-      Para um Analista de Dados e BI, dominar SQL significa ter autonomia total no ciclo de trabalho: sem aguardar times de engenharia para extrações específicas, sem depender de planilhas intermediárias e com capacidade de validar a qualidade dos dados antes de qualquer visualização.
-    </p>
-
-    <div class="two-col">
-      <div class="info-card reveal d2">
-        <div class="info-card-icon icon-teal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A6B5A" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-        </div>
-        <h4>Acesso direto aos dados</h4>
-        <p>Consultar bancos de dados diretamente — sem intermediários — é o que permite análises mais profundas, rápidas e confiáveis em qualquer ambiente corporativo.</p>
-      </div>
-      <div class="info-card reveal d3">
-        <div class="info-card-icon icon-blue">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B3A6B" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <h4>Validação e qualidade de dados</h4>
-        <p>Identificar duplicatas, nulos, outliers e inconsistências na fonte é uma competência crítica — e SQL é a ferramenta mais eficiente para isso.</p>
-      </div>
-      <div class="info-card reveal d4">
-        <div class="info-card-icon icon-gold">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a6a1a" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        </div>
-        <h4>Fundamento para ferramentas avançadas</h4>
-        <p>Python com Pandas, DAX no Power BI e Spark seguem a mesma lógica de SQL. Quem domina SQL aprende qualquer ferramenta de dados com muito mais facilidade.</p>
-      </div>
-      <div class="info-card reveal d5">
-        <div class="info-card-icon icon-teal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A6B5A" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h4>Linguagem do mercado</h4>
-        <p>Presente em praticamente 100% das vagas de dados e BI. SQL é um requisito universal — do analista júnior ao engenheiro sênior de dados.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MÓDULOS DO REPOSITÓRIO -->
-<div class="content-section">
-  <div class="content-inner">
-    <div class="section-marker reveal">
-      <span class="section-num">02</span>
-      <span class="section-rule"></span>
-      <span class="section-tag">Conteúdo do Repositório</span>
-    </div>
-    <h2 class="section-h reveal d1">O que está<br/><em>documentado.</em></h2>
-    <p class="prose reveal d2">O repositório organiza os estudos por módulo, com cada pasta contendo exercícios práticos progressivos sobre uma base de dados real de um sistema de pontos de fidelidade.</p>
-
-    <table class="module-table reveal d3">
-      <thead>
-        <tr>
-          <th>Módulo</th>
-          <th>Conteúdo</th>
-          <th style="text-align:center;">Exercícios</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="mod-num">01</span></td>
-          <td>
-            <div class="mod-name">WHERE e Filtros</div>
-            <div class="mod-desc">Seleção de dados com condições simples e compostas — comparações, operadores lógicos, LIKE, BETWEEN e filtros por data com strftime.</div>
-            <div class="mod-tags">
-              <span class="mod-tag">SELECT</span>
-              <span class="mod-tag">WHERE</span>
-              <span class="mod-tag">ORDER BY</span>
-              <span class="mod-tag">AS</span>
-            </div>
-          </td>
-          <td class="mod-count">12</td>
-        </tr>
-        <tr>
-          <td><span class="mod-num">02</span></td>
-          <td>
-            <div class="mod-name">CASE WHEN THEN</div>
-            <div class="mod-desc">Lógica condicional dentro de consultas para criação de categorias, faixas e classificações dinâmicas — o IF/ELSE do SQL.</div>
-            <div class="mod-tags">
-              <span class="mod-tag">CASE</span>
-              <span class="mod-tag">WHEN</span>
-              <span class="mod-tag">THEN</span>
-              <span class="mod-tag">END</span>
-            </div>
-          </td>
-          <td class="mod-count">3</td>
-        </tr>
-        <tr>
-          <td><span class="mod-num">03</span></td>
-          <td>
-            <div class="mod-name">Funções de Agregação</div>
-            <div class="mod-desc">Resumo e sumarização de dados com as principais funções analíticas — base para qualquer dashboard ou relatório gerencial.</div>
-            <div class="mod-tags">
-              <span class="mod-tag">COUNT</span>
-              <span class="mod-tag">SUM</span>
-              <span class="mod-tag">AVG</span>
-              <span class="mod-tag">MIN / MAX</span>
-              <span class="mod-tag">DISTINCT</span>
-            </div>
-          </td>
-          <td class="mod-count">6</td>
-        </tr>
-        <tr>
-          <td><span class="mod-num">04</span></td>
-          <td>
-            <div class="mod-name">GROUP BY e HAVING</div>
-            <div class="mod-desc">Agrupamento de resultados por categorias e filtragem sobre grupos — essencial para rankings, top N e análises por segmento.</div>
-            <div class="mod-tags">
-              <span class="mod-tag">GROUP BY</span>
-              <span class="mod-tag">HAVING</span>
-              <span class="mod-tag">Rankings</span>
-              <span class="mod-tag">Top N</span>
-            </div>
-          </td>
-          <td class="mod-count">3+</td>
-        </tr>
-        <tr>
-          <td><span class="mod-num">Ex</span></td>
-          <td>
-            <div class="mod-name">Exercícios Práticos</div>
-            <div class="mod-desc">Desafios aplicados sobre o dataset completo — combinando múltiplos conceitos em consultas que respondem perguntas de negócio reais.</div>
-            <div class="mod-tags">
-              <span class="mod-tag">Multi-conceito</span>
-              <span class="mod-tag">Negócio</span>
-              <span class="mod-tag">Dataset real</span>
-            </div>
-          </td>
-          <td class="mod-count">20+</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- CAPACIDADE DEMONSTRADA -->
-<div class="content-section alt">
-  <div class="content-inner">
-    <div class="section-marker reveal">
-      <span class="section-num">03</span>
-      <span class="section-rule"></span>
-      <span class="section-tag">Capacidade Demonstrada</span>
-    </div>
-    <h2 class="section-h reveal d1">O que esse estudo<br/><em>demonstra.</em></h2>
-    <p class="prose reveal d2">Um repositório organizado, documentado e progressivo diz muito mais sobre um profissional do que uma lista de cursos no currículo. Veja o que este projeto evidencia na prática:</p>
-
-    <ul class="results-list">
-      <li class="reveal d2">
-        <span class="res-num">01</span>
-        <div class="res-body">
-          <h5>Disciplina e método de aprendizado</h5>
-          <p>Cada exercício foi documentado com a pergunta de negócio que responde — demonstrando que o aprendizado foi intencional, orientado a resultados e não apenas à sintaxe.</p>
-        </div>
-      </li>
-      <li class="reveal d3">
-        <span class="res-num">02</span>
-        <div class="res-body">
-          <h5>Raciocínio analítico aplicado</h5>
-          <p>Os exercícios avançam de consultas simples para problemas compostos — evidenciando a capacidade de quebrar questões complexas em etapas lógicas de consulta.</p>
-        </div>
-      </li>
-      <li class="reveal d4">
-        <span class="res-num">03</span>
-        <div class="res-body">
-          <h5>Uso de base de dados real</h5>
-          <p>Trabalhar com o dataset teomewhy-loyalty-system do Kaggle — com tabelas de clientes, transações e produtos reais — é muito mais valioso do que exemplos genéricos, pois simula o ambiente corporativo.</p>
-        </div>
-      </li>
-      <li class="reveal d5">
-        <span class="res-num">04</span>
-        <div class="res-body">
-          <h5>Complemento direto ao trabalho em BI</h5>
-          <p>SQL e Power BI se complementam: SQL valida e prepara os dados na fonte; o Power BI transforma esses dados em visualização. Dominar os dois é o perfil buscado pelo mercado de BI.</p>
-        </div>
-      </li>
-      <li class="reveal d5">
-        <span class="res-num">05</span>
-        <div class="res-body">
-          <h5>Evolução contínua e documentada</h5>
-          <p>O repositório registra a progressão real do aprendizado — de WHERE básico a GROUP BY com HAVING — mostrando não apenas onde estou, mas o caminho percorrido para chegar aqui.</p>
-        </div>
-      </li>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Pedro Ramos, início"><img src="img/logo.png" alt="Pedro Ramos. Dados &amp; BI" width="133" height="40"></a>
+    <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><span></span></button>
+    <ul class="menu" id="menu">
+      <li><a href="index.html#sobre">Sobre</a></li><li><a href="index.html#projetos">Projetos</a></li><li><a href="index.html#formacao">Formação</a></li><li><a href="index.html#experiencia">Experiência</a></li><li><a href="index.html#contato">Contato</a></li>
+      <li class="navcta"><a href="curriculo_pedro_ramos.pdf" target="_blank" rel="noopener">Currículo</a></li>
     </ul>
+  </div>
+</header>
 
-    <!-- TECH + CTA -->
-    <div style="margin-top:2rem;" class="reveal">
-      <p style="font-family:var(--f-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:0.8rem;">Stack utilizada</p>
-      <div class="tech-grid">
-        <span class="tech-tag tt-sql">SQL</span>
-        <span class="tech-tag tt-sql">SQLite</span>
-        <span class="tech-tag tt-sql">Oracle SQL</span>
-        <span class="tech-tag tt-sql">MySQL</span>
-        <span class="tech-tag tt-tool">VS Code</span>
-        <span class="tech-tag tt-other">Git</span>
-        <span class="tech-tag tt-other">GitHub</span>
-      </div>
-    </div>
+<main id="conteudo">
 
-    <div class="cta-block reveal">
-      <div class="cta-text">
-        <h3>Explore o repositório.</h3>
-        <p>Todos os exercícios, scripts e documentação disponíveis publicamente no GitHub.</p>
+<section class="phead">
+  <div class="wrap">
+    <a class="back" href="index.html#projetos"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+    <p class="eyebrow">Projeto · SQL · Análise de dados</p>
+    <h1>Repositório de estudos SQL<span class="dot">.</span></h1>
+    <p class="lead">Uma jornada documentada de aprendizado em SQL, organizada por progressão, com exercícios práticos sobre uma base de dados real do Kaggle. Mais que um repositório de código, é evidência de raciocínio analítico em construção contínua.</p>
+    <dl class="meta">
+      <div><dt>Linguagem</dt><dd>SQL · SQLite</dd></div>
+      <div><dt>Base de dados</dt><dd>Kaggle · teomewhy-loyalty-system</dd></div>
+      <div><dt>Exercícios</dt><dd>24+ documentados</dd></div>
+      <div><dt>Referência</dt><dd>Curso Téo Calvo · Téo Me Why</dd></div>
+    </dl>
+    <a class="card" href="https://github.com/ppedropeu/exercicios_sql" target="_blank" rel="noopener" style="display:block; margin-top:48px; max-width: 820px" aria-label="Abrir o repositório no GitHub">
+      <div class="bar"><b>04_group_by / 02_group_by.sql</b><i></i><span>Exemplo de consulta · módulo 04</span></div>
+      <div class="code" role="img" aria-label="Consulta SQL dos 10 clientes com mais pontos em julho de 2025"><div class="l"><span class="ln">1</span><span><span class="c">-- Top 10 clientes que mais fizeram pontos no mês de Julho/2025</span></span></div><div class="l"><span class="ln">2</span><span><span class="k">SELECT</span></span></div><div class="l"><span class="ln">3</span><span>    t.idCliente,</span></div><div class="l"><span class="ln">4</span><span>    <span class="k">SUM</span>(t.qtdPontos) <span class="k">AS</span> total_pontos</span></div><div class="l"><span class="ln">5</span><span><span class="k">FROM</span> transactions t</span></div><div class="l"><span class="ln">6</span><span><span class="k">WHERE</span> <span class="k">strftime</span>(<span class="s">'%Y-%m'</span>, t.dtTransaction) = <span class="s">'2025-07'</span></span></div><div class="l"><span class="ln">7</span><span><span class="k">GROUP BY</span> t.idCliente</span></div><div class="l"><span class="ln">8</span><span><span class="k">ORDER BY</span> total_pontos <span class="k">DESC</span></span></div><div class="l"><span class="ln">9</span><span><span class="k">LIMIT</span> 10;</span></div></div>
+      <div class="foot"><span>Clique para abrir o repositório</span><span>GitHub <span class="arrow" aria-hidden="true">→</span></span></div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="head" style="margin-bottom:0"><p class="eyebrow">01 · A importância do SQL</p><h2>Por que SQL é fundamental<span class="dot">.</span></h2>
+        <div class="prose" style="margin-top:28px">
+          <p>SQL é a linguagem universal dos dados. Qualquer que seja a ferramenta, Power BI, Python, Tableau ou outra plataforma, a capacidade de <strong>interrogar bancos de dados diretamente</strong> diferencia o analista que depende de extrações prontas do profissional que acessa, transforma e valida os dados na origem.</p>
+          <p>Para quem trabalha com dados e BI, dominar SQL é ter autonomia no ciclo de trabalho: sem esperar o time de engenharia por extrações específicas, sem depender de planilhas intermediárias e com a capacidade de validar a qualidade dos dados antes de qualquer visualização.</p>
+        </div>
       </div>
-      <div class="cta-btns">
-        <a href="https://github.com/ppedropeu/exercicios_sql" target="_blank" rel="noopener" class="btn btn-teal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          Ver no GitHub
-        </a>
-        <a href="index.html" class="btn btn-outline-light">← Voltar ao portfólio</a>
-      </div>
+      <ol class="items"><li class="num"><span class="n">01</span><div><b>Acesso direto aos dados</b><span class="t">Consultar bancos de dados diretamente, sem intermediários, permite análises mais profundas, rápidas e confiáveis em qualquer ambiente corporativo.</span></div></li><li class="num"><span class="n">02</span><div><b>Validação e qualidade de dados</b><span class="t">Identificar duplicatas, nulos, outliers e inconsistências na fonte é uma competência crítica, e o SQL é a ferramenta mais eficiente para isso.</span></div></li><li class="num"><span class="n">03</span><div><b>Fundamento para ferramentas avançadas</b><span class="t">Python com Pandas, DAX no Power BI e Spark seguem a mesma lógica do SQL. Quem domina SQL aprende qualquer ferramenta de dados com mais facilidade.</span></div></li><li class="num"><span class="n">04</span><div><b>Linguagem do mercado</b><span class="t">Presente em praticamente todas as vagas de dados e BI, o SQL é requisito universal, do analista júnior ao engenheiro sênior de dados.</span></div></li></ol>
     </div>
   </div>
-</div>
+</section>
 
-<footer>
-  <span class="f-logo">Pedro Ramos.</span>
-  <p>Analista de Dados &amp; BI &nbsp;·&nbsp; Recife, Brasil &nbsp;·&nbsp; 2026</p>
+<section class="section">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">02 · Conteúdo do repositório</p><h2>O que está documentado<span class="dot">.</span></h2><p class="lead">Os estudos estão organizados por módulo, cada pasta com exercícios práticos progressivos sobre uma base real de um sistema de pontos de fidelidade.</p></div>
+    <table class="modules"><thead><tr><th>Módulo</th><th>Conteúdo</th><th style="text-align:right">Volume</th></tr></thead><tbody><tr><td class="m">01</td><td class="t"><b>WHERE e filtros</b><span>Seleção de dados com condições simples e compostas: comparações, operadores lógicos, LIKE, BETWEEN e filtros por data com strftime.</span><ul class="chips"><li class="chip">SELECT</li><li class="chip">WHERE</li><li class="chip">ORDER BY</li><li class="chip">AS</li></ul></td><td class="x">12<span style="display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:0">exercícios</span></td></tr><tr><td class="m">02</td><td class="t"><b>CASE WHEN THEN</b><span>Lógica condicional dentro de consultas para criar categorias, faixas e classificações dinâmicas: o IF/ELSE do SQL.</span><ul class="chips"><li class="chip">CASE</li><li class="chip">WHEN</li><li class="chip">THEN</li><li class="chip">END</li></ul></td><td class="x">3<span style="display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:0">exercícios</span></td></tr><tr><td class="m">03</td><td class="t"><b>Funções de agregação</b><span>Resumo e sumarização de dados com as principais funções analíticas, base para qualquer dashboard ou relatório gerencial.</span><ul class="chips"><li class="chip">COUNT</li><li class="chip">SUM</li><li class="chip">AVG</li><li class="chip">MIN / MAX</li><li class="chip">DISTINCT</li></ul></td><td class="x">6<span style="display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:0">exercícios</span></td></tr><tr><td class="m">04</td><td class="t"><b>GROUP BY e HAVING</b><span>Agrupamento de resultados por categorias e filtragem sobre grupos, essencial para rankings, top N e análises por segmento.</span><ul class="chips"><li class="chip">GROUP BY</li><li class="chip">HAVING</li><li class="chip">Rankings</li><li class="chip">Top N</li></ul></td><td class="x">3+<span style="display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:0">exercícios</span></td></tr><tr><td class="m">Ex</td><td class="t"><b>Exercícios práticos</b><span>Desafios aplicados sobre o dataset completo, combinando vários conceitos em consultas que respondem perguntas de negócio reais.</span><ul class="chips"><li class="chip">Multi-conceito</li><li class="chip">Negócio</li><li class="chip">Dataset real</li></ul></td><td class="x">20+<span style="display:block;font-size:12px;font-weight:500;color:var(--gray);letter-spacing:0">exercícios</span></td></tr></tbody></table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="two">
+      <div class="head" style="margin-bottom:0"><p class="eyebrow">03 · Capacidade demonstrada</p><h2>O que esse estudo demonstra<span class="dot">.</span></h2><p class="lead">Um repositório organizado, documentado e progressivo diz mais sobre um profissional do que uma lista de cursos no currículo.</p><div style="margin-top:28px"><p class="label">Stack utilizada</p><ul class="chips"><li class="chip on">SQL</li><li class="chip on">SQLite</li><li class="chip">Oracle SQL</li><li class="chip">MySQL</li><li class="chip">VS Code</li><li class="chip">Git</li><li class="chip">GitHub</li></ul></div></div>
+      <ol class="items"><li class="num"><span class="n">01</span><div><b>Disciplina e método de aprendizado</b><span class="t">Cada exercício foi documentado com a pergunta de negócio que responde: o aprendizado foi intencional, orientado a resultado e não só à sintaxe.</span></div></li><li class="num"><span class="n">02</span><div><b>Raciocínio analítico aplicado</b><span class="t">Os exercícios avançam de consultas simples para problemas compostos, mostrando a capacidade de quebrar questões complexas em etapas lógicas.</span></div></li><li class="num"><span class="n">03</span><div><b>Uso de base de dados real</b><span class="t">O dataset teomewhy-loyalty-system, do Kaggle, traz tabelas reais de clientes, transações e produtos e simula o ambiente corporativo melhor que exemplos genéricos.</span></div></li><li class="num"><span class="n">04</span><div><b>Complemento direto ao trabalho em BI</b><span class="t">O SQL valida e prepara os dados na fonte; o Power BI os transforma em visualização. Dominar os dois é o perfil buscado pelo mercado de BI.</span></div></li><li class="num"><span class="n">05</span><div><b>Evolução contínua e documentada</b><span class="t">O repositório registra a progressão real, do WHERE básico ao GROUP BY com HAVING, mostrando onde estou e o caminho percorrido até aqui.</span></div></li></ol>
+    </div>
+    <div class="cta">
+      <div><h3>Explore o repositório.</h3><p>Todos os exercícios, scripts e a documentação estão disponíveis publicamente no GitHub.</p></div>
+      <a class="btn" href="https://github.com/ppedropeu/exercicios_sql" target="_blank" rel="noopener">Ver no GitHub <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <img src="img/logo.png" alt="Pedro Ramos. Dados &amp; BI" width="133" height="40">
+    <p>Analista de Dados &amp; BI · João Pessoa, Brasil · 2026</p>
+  </div>
 </footer>
-
 <script>
-  document.documentElement.classList.add('js-ready');
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), {passive:true});
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }});
-  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  (function () {
+    var nav = document.getElementById('nav'), b = document.getElementById('burger'), m = document.getElementById('menu');
+    window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', window.scrollY > 8); }, { passive: true });
+    b.addEventListener('click', function () {
+      var open = m.classList.toggle('open');
+      b.setAttribute('aria-expanded', open); b.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    });
+    m.addEventListener('click', function (e) { if (e.target.tagName === 'A') { m.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); } });
+  })();
 </script>
 </body>
 </html>
